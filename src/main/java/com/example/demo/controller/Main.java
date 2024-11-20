@@ -1,7 +1,5 @@
 package com.example.demo.controller;
 
-import java.lang.reflect.InvocationTargetException;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -13,14 +11,17 @@ public class Main extends Application {
 	private Controller myController;
 
 	@Override
-	public void start(Stage stage) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
-			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void start(Stage stage) {
+		configureStage(stage);
+		myController = new Controller(stage);
+		myController.launchGame();
+	}
+
+	private void configureStage(Stage stage) {
 		stage.setTitle(TITLE);
 		stage.setResizable(false);
 		stage.setHeight(SCREEN_HEIGHT);
 		stage.setWidth(SCREEN_WIDTH);
-		myController = new Controller(stage);
-		myController.launchGame();
 	}
 
 	public static void main(String[] args) {
