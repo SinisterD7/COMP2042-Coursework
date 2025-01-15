@@ -1,6 +1,8 @@
-package com.example.demo;
+package com.example.demo.plane;
 
-public abstract class FighterPlane extends ActiveActorDestructible {
+import com.example.demo.Actor.ActiveActor;
+
+public abstract class FighterPlane extends ActiveActor.ActiveActorDestructible {
 
 	private int health;
 

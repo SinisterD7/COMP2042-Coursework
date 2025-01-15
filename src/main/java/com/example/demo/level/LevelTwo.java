@@ -1,4 +1,8 @@
-package com.example.demo;
+package com.example.demo.level;
+
+import com.example.demo.plane.Boss;
+
+import com.example.demo.Image.ShieldImage;
 
 public class LevelTwo extends LevelParent {
 
@@ -7,14 +11,18 @@ public class LevelTwo extends LevelParent {
 	private final Boss boss;
 	private LevelViewLevelTwo levelView;
 
+	private ShieldImage shieldImage;
+
 	public LevelTwo(double screenHeight, double screenWidth) {
 		super(BACKGROUND_IMAGE_NAME, screenHeight, screenWidth, PLAYER_INITIAL_HEALTH);
 		boss = new Boss();
+		shieldImage = boss.getShieldImage();
 	}
 
 	@Override
 	protected void initializeFriendlyUnits() {
 		getRoot().getChildren().add(getUser());
+		getRoot().getChildren().add(shieldImage);
 	}
 
 	@Override
