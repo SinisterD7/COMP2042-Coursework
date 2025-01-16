@@ -350,139 +350,116 @@ Use the following Maven commands to build, test, package, and run the project.
 
 - projectile
 
-| **Class Name**    | **Description**                                                                                                                | **Changes**                                                                                                                                                                                                                                  |
-|-------------------|--------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| BossProjectile | This class represents the projectiles fired by the boss in the game. It extends the Projectile class and defines specific properties such as the image, size, and velocity for boss projectiles. It moves horizontally at a fixed speed and is updated on each frame to simulate the projectile's movement. | | Key Methods: | - BossProjectile(double initialYPos): Constructor that initializes the projectile with the specified vertical position (initialYPos). The horizontal position is set to a fixed value (950), and the image height is set to 75. <br> - updatePosition(): This method updates the horizontal position of the projectile by moving it left at a speed of −15 units per frame. <br> - updateActor(): Calls updatePosition() to update the position of the projectile during the game loop. | | EnemyProjectile | This class represents the projectiles fired by enemy units. It extends the Projectile class and defines properties such as the image, size, and velocity for enemy projectiles. It moves horizontally at a fixed speed and is updated on each frame to simulate the projectile's movement. | | Key Methods: | - EnemyProjectile(double initialXPos, double initialYPos): Constructor that initializes the projectile with the specified horizontal and vertical positions (initialXPos, initialYPos). The image height is set to 50. <br> - updatePosition(): This method updates the horizontal position of the projectile by moving it left at a speed of −10 units per frame. <br> - updateActor(): Calls updatePosition() to update the position of the projectile during the game loop. | | UserProjectile | This class represents the projectiles fired by the user (player). It extends the Projectile class and defines properties such as the image, size, and velocity for user projectiles. It moves horizontally at a fixed speed and is updated on each frame to simulate the projectile's movement. | | Key Methods: | - UserProjectile(double initialXPos, double initialYPos): Constructor that initializes the projectile with the specified horizontal and vertical positions (initialXPos, initialYPos). The image height is set to 125. <br> - updatePosition(): This method updates the horizontal position of the projectile by moving it right at a speed of 15 units per frame. <br> - updateActor(): Calls updatePosition() to update the position of the projectile during the game loop. |
+| **Class Name**            | **Description**                                                                                                                                                                                                                                                                                                                                                             |
+|---------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Projectile                | his abstract class represents a generic projectile in the game. It provides common attributes and behaviors for all projectile types, such as initialization, movement, and destruction upon taking damage. Subclasses must implement specific behaviors, such as defining movement patterns by overriding the updatePosition method..                                             |
 
-- ui
+| **Key Methods**                                                                                                                                                                                                                                     |
+|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Projectile(String imageName, int imageHeight, double initialXPos, double initialYPos)**                                                                           | Constructor that initializes a projectile with the specified image, height, and initial position. Inherits destructible behavior from `ActiveActorDestructible`.                                                                                      |
+| **takeDamage()**                                                                                                                                                    | Defines the behavior of the projectile when it takes damage. By default, the projectile is destroyed by invoking the `destroy` method.                                                                                                              |
+| **abstract void updatePosition()**                                                                                                                                 | An abstract method that must be implemented by subclasses to define the specific movement pattern of the projectile.                                                                                                                                |
 
-| **Class Name**  | **Description**                                                            | **Changes**                                                                                                                                                        |
-|-----------------|----------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| GameOverImage | This class represents the game over image displayed when the player loses the game. It extends ImageView and is responsible for setting up the image and its position on the screen. | | Key Methods: | - GameOverImage(double xPosition, double yPosition): Constructor that initializes the game over image at the specified xPosition and yPosition. It sets the image to "gameover.png". | | HeartDisplay | This class represents the heart display shown in the game to indicate the player's health. It uses an HBox to display a row of heart images. It can dynamically remove hearts when the player takes damage. | | Key Methods: | - HeartDisplay(double xPosition, double yPosition, int heartsToDisplay): Constructor that initializes the heart display with the specified position and the number of hearts to show. <br> - removeHeart(): Removes the first heart from the display when the player takes damage. <br> - getContainer(): Returns the container (HBox) that holds the heart images. | | ShieldImage | This class represents a shield image that can be shown or hidden to indicate the availability of a shield for the player. It extends ImageView and is used to control the visibility of the shield on the screen. | | Key Methods: | - ShieldImage(double xPosition, double yPosition): Constructor that initializes the shield image at the specified xPosition and yPosition. The shield image is initially hidden. <br> - showShield(): Makes the shield visible. <br> - hideShield(): Hides the shield. | | WinImage | This class represents the win image displayed when the player wins the game. It extends ImageView and is responsible for setting up the image and its position on the screen. | | Key Methods: | - WinImage(double xPosition, double yPosition): Constructor that initializes the win image at the specified xPosition and yPosition. It sets the image to "youwin.png" and makes it initially invisible. <br> - showWinImage(): Makes the win image visible when the player wins. |
 
 ## 5.0 Summary
 
 ### 5.1 Features
 
-1. **Start Screen**
-    - **Description**: Implemented a start screen with a title, "Start Game," and "Exit" buttons. Added background music that loops indefinitely at 50% volume.
-    - **Background Music**: Integrated background music that starts playing automatically when the start screen is displayed, and stops when the game starts or the application is closed.
+1. **StartMenu**
+    - **Description**: Created a start menu for the game, including a title, "Start Game," and "Exit" buttons. The menu is styled with a black background and centered elements.
+    - **Background **: IThe start menu allows the player to launch the game or exit the application. The layout adjusts automatically and is styled for visual clarity.
     - **Classes Involved**:
-        - `StartScreen` (UI screen)
-        - `Controller ` (game logic controller)
+        - `StartMenu` handles the UI for the start menu)
+
     - **Key Methods**:
-        - `StartScreen.show()`
-        - `StartScreen.initializeBackgroundMusic()`
-        - `StartScreen.stopBackgroundMusic()`
-        - `Controller.launchGame()`
+        - `display(Stage stage, Runnable startGame)` Sets up the start menu UI and handles the "Start Game" and "Exit" button actions.
+- **Key Features**:Title Label: Displays "Sky Battle" in bold white text with a large font size.
+Buttons:
+"Start Game" button launches the game using the provided startGame callback.
+"Exit" button closes the application.
 
 2. **Boss Class Implementation**
-    - **Description**:Created a Boss class that extends the FighterPlane class, representing the main enemy in the game with dynamic movement patterns, projectile firing, and shield activation.
-  - **Key Features**:The Boss has a move pattern with random vertical movements, periodically activates a shield to block damage, and fires projectiles at a certain rate. It also has a health value that decreases when not shielded.
+    - **Description**:Represents the boss enemy in the game with unique abilities such as a shield, vertical movement patterns, and a fire rate for projectiles. The boss can move, fire projectiles, activate/deactivate shields, and take damage.
+  - **Key Features**:Constants: Predefined properties like fire rate, health, movement boundaries, and shield duration.
+Randomization: Movement patterns and shield activation are randomized for unpredictability.
+Visual Integration: Uses ShieldImage to visually represent shield activation.
+Bounds Checking: Prevents the boss from moving outside defined vertical limits.
     - **Classes Involved**:
-        - `Boss` (extends FighterPlane)
-        - `BossProjectile` (projectile fired by Boss)
+        - `Boss` (extends FighterPlane, implements boss-specific features)
+        - `BossProjectile` (projectiles fired by the boss).
     - **Key Methods**:
-        - `Boss.updatePosition()`  (updates the position of the Boss)
-        - `Boss.updateActor()` (updates both position and shield status)
-        - `Boss.takeDamage()` (handles damage, considering the shield)
-        - `Boss.initializeMovePattern()` (sets the Boss's movement pattern)
-        - `Boss.updateShield()`(manages shield activation and deactivation)
-        - `Boss.getNextMove()`  (determines the next move in the Boss's pattern)
-        - `Boss.activateShield()` (activates the shield)
-        - `Boss.deactivateShield()` (deactivates the shield)
-
-3. **Background Music Management**
-    - **Description**: Implemented a reusable class for managing background music in the application.
+        - `updatePosition()`  (Updates the boss's position based on its movement pattern.)
+        - `initializeMovePattern()` (Defines and randomizes the vertical movement pattern.)
+        - `getNextMove()` (Retrieves the next movement from the pattern, shuffling if necessary.)
+      
+3. **EndGame**
+    - **Description**: Cleans up and terminates the game session by stopping animations, clearing game objects, and resetting event listeners. This method ensures that all game-related activities are halted and resources are released.
     - **Classes Involved**:
-        - `BackgroundMusic` (controller)
-        - `LevelParent` (level)
-    - **Key Methods**:
-        - `BackgroundMusic.play()`
-        - `BackgroundMusic.stop()`
-        - `LevelParent.initializeMusic()`
+        - `timeline.getKeyFrames().clear()` (Removes all scheduled animations or events from the timeline.)
+        - `background.setOnKeyReleased(null)` (Removes the keyboard event listener to prevent further input processing.)
+    - **Key Features**:
+        - `Ensures a clean game termination to avoid memory leaks or unwanted behavior when restarting or exiting.`
+        - `Prevents further user interaction by disabling event listeners.`
+        - `Prepares the game environment for a potential restart or application shutdown.`
 
 
 ### 5.2 Refactoring
 
 1. **Package Organization**
-    - **Description**: Reorganized the project structure into specific packages (`actor`,`controller`, `level`, `levelview`, `manager`, `projectiles`, `ui/ux`) to enhance code maintainability and readability.
+    - **Description**: Reorganized the project structure into specific packages (`actor`,`controller`, `level`, `levelview`, `manager`, `projectiles`,) to enhance code maintainability and readability.
     - **Benefits**:
         - Improved modularity.
         - Easier navigation and management of classes.
         - Enhanced scalability for future developments.
 
-2. **Background Music Management**
-    - **Description**:Implemented background music functionality to enhance the gaming experience by adding dynamic music playback for different levels and menu screens.
-    - **Key Changes**:
-        - Implemented background music initialization in StartScreen.initializeBackgroundMusic(), using MediaPlayer to load and play the music file.
-        - Introduced StartScreen.stopBackgroundMusic() method to stop the music when transitioning to the game or when exiting the application.
-
-3. **Game State Management**
-    - **Description**: Refactored game state transitions and pause/resume functionalities to ensure smooth and error-free gameplay, especially during critical states like game-over.
-    - **Key Changes**:
-        - Implemented state checks within `PauseManager` to prevent unintended game resumes.
-        - Ensured timelines are appropriately managed during state transitions.
-
-4. **`LevelViewLevelTwo`**
+2. **`LevelViewLevelTwo`**
     - **Description**: The `LevelViewLevelTwo` class and integrated its functionalities into the `LevelView` class by adding `showShield()` and `hideShield()` methods.
     - **Solution**: redundant methods and unused code to improve code readability and maintainability.
 
-5. **Fixed Shield Display in Boss Level**
+3. **Fixed Shield Display in Boss Level**
     - **Description**: The shield was not displaying correctly in the boss level.
     - **Solution**: Moved the shield showing functionality to the `LevelBoss` class for better separation of concerns.
 
 ### 5.3 Achievements
 
-1. **Successful Implementation of Background Music System**
-    - **Description**:  Developed and integrated a flexible background music management system using JavaFX, enabling dynamic music transitions between different game levels and menu screens. The system includes controls for playing, stopping, and adjusting the volume of the music, with the ability to loop tracks infinitely, providing a seamless auditory experience for players.
+1. **Development of a Comprehensive Boss Level**
+    - **Description**: Created a challenging boss level featuring unique shield mechanics, custom animations, and clearly defined win/lose conditions. This feature introduced a new level of complexity and engagement, providing players with a rewarding challenge.
     - **Impact**:
-        - Enhanced the overall user experience with immersive background music.
-        - Allowed for customization of music tracks based on different game scenarios.
-        - Contributed to a more polished and professional game atmosphere. 
+        - Increased the overall difficulty and engagement of the game.
+        - Highlighted advanced skills in game mechanics and level design.
 
-2. **Development of a Comprehensive Boss Level**
-    - **Description**: Designed and implemented a challenging boss level featuring a unique boss with shield mechanics, custom animations, and specific win/lose conditions. This addition introduced a new layer of difficulty and excitement, offering players a formidable challenge and a sense of accomplishment upon victory.
+2. **Creation of a Start Menu**
+    - **Description**: Developed a functional start menu that allows players to begin new games, load saved progress, and adjust game settings.
     - **Impact**:
-        - Elevated the overall game difficulty and player satisfaction.
-        - Showcased advanced game design and development capabilities.
-
-3. ** Implemented Start Menu**
-    - **Description**: CDeveloped a start menu that enables users to begin a new game, load saved progress, and access game settings.
-    - **Impact**:
-        - Provided a clear and intuitive starting point for players to interact with the game.
+        - Improved game accessibility with an easy-to-navigate interface.
         - Streamlined the navigation process, enhancing overall user experience and game flow.
 
-4. **Shield Display Fix**
-    - **Description**: ixed the issue with the shield display, ensuring it renders correctly during gameplay.
+3. **Fixing the Shield Display Bug**
+    - **Description**:  Resolved an issue where the shield display failed to render correctly, ensuring accurate representation during gameplay.
     - **Impact**:
-        - Improved visual clarity and accuracy of the shield feature.
-        - Enhanced gameplay by ensuring players can rely on the correct shield representation during critical moments.
-
+        - Enhanced visual clarity and the reliability of the shield feature.
+        - Improved gameplay by ensuring players can trust visual elements during key moments
 ---
 
 ## 6.0 Unexpected Problems
 
 ### 1. **Hitbox Not Functional**
-- **Issue**: Certain characters or objects in the game had non-functional hitboxes, causing collision detection to fail and affecting gameplay.
+- **Issue**: Certain characters and objects in the game experienced non-functional hitboxes, causing collision detection failures that negatively impacted gameplay.
 - **Solution**:
--Fixed the issue by ensuring that hitboxes were correctly assigned and updated in each game frame.
--Added additional unit tests to verify that all hitboxes were functioning as expected across different game states.
-- Investigated the hitbox calculation logic and found errors in how hitboxes were being defined and updated.
-- Conducted manual testing for various game objects to confirm that collisions were detected accurately, improving overall gameplay stability.
+-Investigated the hitbox calculation logic and identified errors in the definitions and updates.
+-Corrected the hitbox assignment and ensured it was updated consistently during each game frame.
+- Performed manual testing on key game objects to confirm accurate collision detection, enhancing gameplay stability.
 
 ### 2. **Integration Issues After Refactoring Game Levels**
-- **Issue**: After refactoring the codebase to introduce new manager classes, issues emerged with the transition between game levels. Players encountered crashes or lag when moving from one level to the next, interrupting the gameplay flow.
+- **Issue**: Refactoring the codebase to include new manager classes caused problems during game level transitions, leading to crashes or lags that disrupted gameplay.
 
 - **Solution**:
-    - Implemented an incremental refactoring approach to ensure that changes were made in manageable portions, allowing for continuous testing.
-    - Focused on testing level transitions specifically, identifying that the new manager classes were not properly handling the state changes between levels.
+    - Adopted an incremental refactoring approach, ensuring changes were applied gradually and tested continuously.
+    - Identified and resolved state management issues in the new manager classes, ensuring smooth transitions between levels.
     - Adjusted the logic in the level manager to ensure that it properly initialized and cleaned up resources between level transitions.
-    - Worked with the team to review the changes and ensure that the refactor did not introduce unintended side effects. This included reviewing object dependencies and ensuring the state management system was robust across different game levels.
-    - 
-### 3. **Conflict During End Screen Display**
-- **Issue**: When the game reached the end screen, some UI elements conflicted, resulting in abnormal displays or the inability to exit the screen properly. This led to issues where the player was stuck or unable to interact with the UI correctly.
+
+### 3. **End Screen UI Conflicts**
+- **Issue**:  UI conflicts on the end screen caused abnormal displays and prevented players from exiting properly, leaving them stuck in the game.
 - **Solution**:
-    - Investigated the UI flow for the end screen and discovered that there was a timing issue in how the end screen UI elements were being initialized and displayed.
-    - Introduced a flag to control the end screen’s visibility, making sure it only displayed once all game processes had completed and resources were cleared.
-    - Resolved the conflict by redesigning the screen transition process, ensuring that elements were loaded and displayed in a synchronized manner.
+    - Redesigned the screen transition process to synchronize the loading and display of UI elements, resolving conflicts and enhancing the end screen’s functionality..
+    - Implemented a visibility control flag to ensure the end screen displayed only after all game processes had completed and resources were cleared.
